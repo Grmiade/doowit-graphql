@@ -1,0 +1,18 @@
+# dependencies
+node_modules/
+
+# testing
+coverage/
+.env.test
+
+# production
+dist/
+
+# development
+.vscode/
+.data/
+.env
+.env.*
+
+# misc
+.DS_Store

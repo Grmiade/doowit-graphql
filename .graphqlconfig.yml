@@ -1,0 +1,3 @@
+extensions:
+  endpoints:
+    default: http://localhost:4000
