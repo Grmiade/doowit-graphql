@@ -11,14 +11,12 @@ export interface TaskDocument extends Document {
 
 export default class MongoConnector {
   private client: MongoClient
-  private databaseName: string
 
-  constructor(client: MongoClient, databaseName: string) {
+  constructor(client: MongoClient) {
     this.client = client
-    this.databaseName = databaseName
   }
 
   public collection<Model>(name: string) {
-    return this.client.db(this.databaseName).collection<Model>(name)
+    return this.client.db().collection<Model>(name)
   }
 }

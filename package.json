@@ -4,11 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./dist/index.js",
-    "dev": "nodemon ./src/index.ts",
-    "debug": "node --inspect-brk -r dotenv/config -r ts-node/register ./src/index.ts",
+    "start": "nodemon ./src/index.ts",
     "build": "tsc",
-    "deploy": "now --public",
+    "deploy": "now",
     "precommit": "lint-staged"
   },
   "keywords": [],

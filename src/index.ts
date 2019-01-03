@@ -6,8 +6,10 @@ import typeDefs from './typeDefs'
 import resolvers from './resolvers'
 
 async function runServer() {
+  if (!process.env.MONGO_HOST) throw new Error('MONGO_HOST env is missing')
+
   const mongoClient = await MongoClient.connect(
-    `mongodb://${process.env.MONGO_HOST}`,
+    process.env.MONGO_HOST,
     { useNewUrlParser: true },
   )
 

@@ -7,7 +7,7 @@ interface ContextOptions {
 }
 
 export function createContext(options: ContextOptions) {
-  const db = new MongoConnector(options.mongoClient, 'doowit')
+  const db = new MongoConnector(options.mongoClient)
   return { db }
 }
 
