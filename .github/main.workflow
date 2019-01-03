@@ -1,25 +1,25 @@
 workflow "New workflow" {
   on = "push"
-  resolves = ["GitHub Action for Zeit"]
+  resolves = ["Deploy"]
 }
 
-action "GitHub Action for npm" {
+action "Install dependencies" {
   uses = "actions/npm@e7aaefe"
-  runs = "install"
+  runs = "npm install"
 }
 
-action "GitHub Action for npm-1" {
+action "Build" {
   uses = "actions/npm@e7aaefe"
-  needs = ["GitHub Action for npm"]
-  runs = "run-script build"
+  runs = "npm run-script build"
+  needs = ["Install dependencies"]
 }
 
-action "GitHub Action for Zeit" {
+action "Deploy" {
   uses = "actions/zeit-now@9fe84d5"
-  needs = ["GitHub Action for npm-1"]
-  runs = "deploy"
+  runs = "now deploy"
   secrets = ["ZEIT_TOKEN"]
   env = {
     MONGO_HOST = "mongodb://Grmiade:Azerty5811!M@ds213472.mlab.com:13472/doowit"
   }
+  needs = ["Build"]
 }
