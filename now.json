@@ -1,7 +1,7 @@
 {
   "version": 1,
   "public": true,
-  "name": "doowit",
+  "name": "doowit-server",
   "alias": "doowit-server.grmiade.tech",
   "env": {
     "MONGO_HOST": "@mongo-host"
