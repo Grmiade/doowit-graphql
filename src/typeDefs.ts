@@ -3,7 +3,7 @@ import { gql } from 'apollo-server'
 const typeDefs = gql`
   type Task {
     id: ID!
-    message: String!
+    message: String
     done: Boolean!
   }
 
