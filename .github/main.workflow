@@ -1,6 +1,6 @@
 workflow "New workflow" {
   on = "push"
-  resolves = ["Deploy"]
+  resolves = ["Alias"]
 }
 
 action "Install dependencies" {
@@ -8,14 +8,15 @@ action "Install dependencies" {
   args = "install"
 }
 
-action "Build" {
-  uses = "actions/npm@e7aaefe"
-  needs = ["Install dependencies"]
-  args = "run-script build"
-}
-
 action "Deploy" {
   uses = "actions/zeit-now@9fe84d5"
-  needs = ["Build"]
   secrets = ["ZEIT_TOKEN"]
+  args = "deploy"
+}
+
+action "Alias" {
+  uses = "actions/zeit-now@9fe84d5"
+  needs = ["Deploy"]
+  secrets = ["ZEIT_TOKEN"]
+  args = "alias"
 }
