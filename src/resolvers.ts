@@ -12,6 +12,13 @@ const TASK_DELETED = 'TASK_DELETED'
 export default {
   Task: {
     id: (parent: TaskDocument) => parent._id.toHexString(),
+
+    // We simulate a long request
+    async message(parent: TaskDocument) {
+      const millisecondsToWait = Math.floor(Math.random() * 5000)
+      await new Promise(resolve => setTimeout(resolve, millisecondsToWait))
+      return parent.message
+    },
   },
 
   Mutation: {
