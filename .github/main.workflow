@@ -21,5 +21,4 @@ action "Deploy" {
     MONGO_HOST = "mongodb://Grmiade:Azerty5811!M@ds213472.mlab.com:13472/doowit"
   }
   needs = ["Build"]
-  args = "--token"
 }
