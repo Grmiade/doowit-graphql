@@ -16,9 +16,7 @@ action "Build" {
 
 action "Deploy" {
   uses = "actions/zeit-now@9fe84d5"
-  env = {
-    MONGO_HOST = "mongodb://Grmiade:Azerty5811!M@ds213472.mlab.com:13472/doowit"
-  }
   needs = ["Build"]
   secrets = ["ZEIT_TOKEN"]
+  args = "-e NODE_ENV=production -e MONGO_HOST=@mongo-host"
 }
