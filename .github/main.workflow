@@ -11,7 +11,7 @@ action "Build & Deploy" {
 
 action "Alias" {
   uses = "actions/zeit-now@9fe84d5"
-  needs = ["Deploy"]
+  needs = ["Build & Deploy"]
   secrets = ["ZEIT_TOKEN"]
   args = "alias"
 }
