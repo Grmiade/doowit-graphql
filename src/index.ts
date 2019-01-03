@@ -13,8 +13,6 @@ async function runServer() {
     { useNewUrlParser: true },
   )
 
-  await mongoClient.connect()
-
   const server = new ApolloServer({
     typeDefs,
     resolvers,
