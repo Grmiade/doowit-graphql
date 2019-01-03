@@ -2,6 +2,7 @@
   "version": 2,
   "name": "doowit",
   "alias": "doowit-server.grmiade.tech",
+  "env": ["MONGO_HOST"],
   "builds": [{ "src": "dist/index.js", "use": "@now/node-server" }],
   "routes": [{ "src": "/", "dest": "dist/index.js" }]
 }

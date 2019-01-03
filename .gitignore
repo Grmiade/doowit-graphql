@@ -1,18 +1,13 @@
 # dependencies
 node_modules/
 
-# testing
-coverage/
-.env.test
-
 # production
 dist/
 
 # development
 .vscode/
 .data/
-.env
-.env.*
+now-secrets.json
 
 # misc
 .DS_Store
