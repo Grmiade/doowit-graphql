@@ -13,16 +13,18 @@ async function runServer() {
     { useNewUrlParser: true },
   )
 
+  await mongoClient.connect()
+
   const server = new ApolloServer({
     typeDefs,
     resolvers,
     context: createContext({ mongoClient }),
   })
 
-  server.listen().then(({ url, subscriptionsUrl }) => {
-    console.log(`🚀  Server ready at ${url}`)
-    console.log(`🚀  Subscriptions ready at ${subscriptionsUrl}`)
-  })
+  return server.listen()
 }
 
-runServer()
+runServer().then(serverInfo => {
+  console.log(`🚀  Server ready at ${serverInfo.url}`)
+  console.log(`🚀  Subscriptions ready at ${serverInfo.subscriptionsUrl}`)
+})
