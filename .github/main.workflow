@@ -18,5 +18,4 @@ action "Deploy" {
   uses = "actions/zeit-now@9fe84d5"
   needs = ["Build"]
   secrets = ["ZEIT_TOKEN"]
-  args = "-e NODE_ENV=production -e MONGO_HOST=@mongo-host"
 }
