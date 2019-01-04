@@ -1,4 +1,4 @@
-import { MongoClient, ObjectId } from 'mongodb'
+import { Collection, MongoClient, ObjectId } from 'mongodb'
 
 export interface Document {
   _id: ObjectId
@@ -16,7 +16,9 @@ export default class MongoConnector {
     this.client = client
   }
 
-  public collection<Model>(name: string) {
-    return this.client.db().collection<Model>(name)
+  public collection(name: 'tasks'): Collection<TaskDocument>
+  public collection(name: string): Collection<Document>
+  public collection(name: string) {
+    return this.client.db().collection(name)
   }
 }

@@ -17,60 +17,55 @@ export default {
   Mutation: {
     async createTask(_parent, args: { message: string }, context: Context) {
       const result = await context.db
-        .collection<TaskDocument>('tasks')
+        .collection('tasks')
         .insertOne({ _id: new ObjectId(), message: args.message, done: false })
 
-      // Simulate long request
-      // const millisecondsToWait = Math.floor(Math.random() * 5000)
-      // await new Promise(resolve => setTimeout(resolve, millisecondsToWait))
-
-      pubsub.publish(TASK_CREATED, { taskCreated: result.ops[0] })
-      return result.ops[0]
+      const newTask = result.ops[0]
+      pubsub.publish(TASK_CREATED, { taskCreated: newTask })
+      return newTask
     },
 
     async deleteTask(_parent, args: { id: string }, context: Context) {
       const result = await context.db
-        .collection<TaskDocument>('tasks')
+        .collection('tasks')
         .findOneAndDelete({ _id: new ObjectId(args.id) })
-      pubsub.publish(TASK_DELETED, { taskDeleted: result.value })
-      return result.value
+
+      const deletedTask = result.value
+      pubsub.publish(TASK_DELETED, { taskDeleted: deletedTask })
+      return deletedTask
     },
 
     async toggleTask(_parent, args: { id: string }, context: Context) {
-      const task = await context.db
-        .collection<TaskDocument>('tasks')
-        .findOne({ _id: new ObjectId(args.id) })
+      const taskCollection = context.db.collection('tasks')
+
+      const task = await taskCollection.findOne({ _id: new ObjectId(args.id) })
       if (!task) throw new ApolloError('No task found')
 
-      const result = await context.db
-        .collection<TaskDocument>('tasks')
-        .findOneAndUpdate(
-          { _id: new ObjectId(args.id) },
-          { $set: { done: !task.done } },
-          { returnOriginal: false },
-        )
-      pubsub.publish(TASK_DONE, { taskDone: result.value })
-      return result.value
+      await taskCollection.update({ _id: task._id }, { $set: { done: !task.done } })
+
+      const updatedTask = { ...task, done: !task.done }
+      pubsub.publish(TASK_DONE, { taskDone: updatedTask })
+      return updatedTask
     },
   },
 
   Subscription: {
     taskCreated: {
-      subscribe: () => pubsub.asyncIterator([TASK_CREATED]),
+      subscribe: () => pubsub.asyncIterator(TASK_CREATED),
     },
     taskDone: {
-      subscribe: () => pubsub.asyncIterator([TASK_DONE]),
+      subscribe: () => pubsub.asyncIterator(TASK_DONE),
     },
     taskDeleted: {
-      subscribe: () => pubsub.asyncIterator([TASK_DELETED]),
+      subscribe: () => pubsub.asyncIterator(TASK_DELETED),
     },
   },
 
   Query: {
     tasks(_parent, _args, context: Context) {
       return context.db
-        .collection<TaskDocument>('tasks')
-        .find({})
+        .collection('tasks')
+        .find()
         .toArray()
     },
   },
