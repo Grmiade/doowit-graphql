@@ -21,8 +21,8 @@ export default {
         .insertOne({ _id: new ObjectId(), message: args.message, done: false })
 
       // Simulate long request
-      const millisecondsToWait = Math.floor(Math.random() * 5000)
-      await new Promise(resolve => setTimeout(resolve, millisecondsToWait))
+      // const millisecondsToWait = Math.floor(Math.random() * 5000)
+      // await new Promise(resolve => setTimeout(resolve, millisecondsToWait))
 
       pubsub.publish(TASK_CREATED, { taskCreated: result.ops[0] })
       return result.ops[0]
