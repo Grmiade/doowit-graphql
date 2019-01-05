@@ -35,6 +35,7 @@ export default {
       return deletedTask
     },
 
+    // TODO: Separate toggle in 2 steps: check and uncheck to handle concurrency?
     async toggleTask(_parent, args: { id: string }, context: Context) {
       const taskCollection = context.db.collection('tasks')
 
