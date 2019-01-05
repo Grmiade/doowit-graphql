@@ -38,7 +38,10 @@ export default {
     async toggleTask(_parent, args: { id: string }, context: Context) {
       const taskCollection = context.db.collection('tasks')
 
-      const task = await taskCollection.findOne({ _id: new ObjectId(args.id) })
+      const task = await taskCollection.findOne(
+        { _id: new ObjectId(args.id) },
+        { projection: { done: true } },
+      )
       if (!task) throw new ApolloError('No task found')
 
       await taskCollection.update({ _id: task._id }, { $set: { done: !task.done } })
