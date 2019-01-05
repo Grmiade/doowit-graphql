@@ -38,7 +38,7 @@ export default {
     async toggleTask(_parent, args: { id: string }, context: Context) {
       const taskCollection = context.db.collection('tasks')
 
-      const task = await taskCollection.findOne(
+      const task = await taskCollection.findOne<Pick<TaskDocument, '_id' | 'done'>>(
         { _id: new ObjectId(args.id) },
         { projection: { done: true } },
       )
