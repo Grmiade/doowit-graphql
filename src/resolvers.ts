@@ -1,4 +1,5 @@
 import { PubSub, ApolloError } from 'apollo-server'
+import { GraphQLDateTime } from 'graphql-iso-date'
 import { ObjectId } from 'mongodb'
 
 import { TaskDocument } from 'connectors/mongo'
@@ -10,15 +11,20 @@ const TASK_DONE = 'TASK_DONE'
 const TASK_DELETED = 'TASK_DELETED'
 
 export default {
+  DateTime: GraphQLDateTime,
+
   Task: {
     id: (parent: TaskDocument) => parent._id.toHexString(),
   },
 
   Mutation: {
     async createTask(_parent, args: { message: string }, context: Context) {
-      const result = await context.db
-        .collection('tasks')
-        .insertOne({ _id: new ObjectId(), message: args.message, done: false })
+      const result = await context.db.collection('tasks').insertOne({
+        _id: new ObjectId(),
+        message: args.message,
+        done: false,
+        updatedAt: new Date(),
+      })
 
       const newTask = result.ops[0]
       pubsub.publish(TASK_CREATED, { taskCreated: newTask })
@@ -35,7 +41,6 @@ export default {
       return deletedTask
     },
 
-    // TODO: Separate toggle in 2 steps: check and uncheck to handle concurrency?
     async toggleTask(_parent, args: { id: string }, context: Context) {
       const taskCollection = context.db.collection('tasks')
 
@@ -45,9 +50,10 @@ export default {
       )
       if (!task) throw new ApolloError('No task found')
 
-      await taskCollection.update({ _id: task._id }, { $set: { done: !task.done } })
+      const update = { done: !task.done, updatedAt: new Date() }
+      await taskCollection.update({ _id: task._id }, { $set: update })
 
-      const updatedTask = { ...task, done: !task.done }
+      const updatedTask = { ...task, ...update }
       pubsub.publish(TASK_DONE, { taskDone: updatedTask })
       return updatedTask
     },

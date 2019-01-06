@@ -15,11 +15,13 @@
   "dependencies": {
     "apollo-server": "2.3.1",
     "graphql": "14.0.2",
+    "graphql-iso-date": "3.6.1",
     "lodash": "4.17.11",
     "mongodb": "3.1.10"
   },
   "devDependencies": {
     "@types/graphql": "14.0.4",
+    "@types/graphql-iso-date": "3.3.1",
     "@types/lodash": "4.14.119",
     "@types/mongodb": "3.1.18",
     "@types/node": "10.12.18",
@@ -28,9 +30,9 @@
     "nodemon": "1.18.9",
     "now-env": "3.1.0",
     "prettier": "1.15.3",
+    "ts-node": "7.0.1",
     "tslint": "5.12.0",
     "tslint-config-prettier": "1.17.0",
-    "ts-node": "7.0.1",
     "typescript": "3.2.2"
   },
   "lint-staged": {
