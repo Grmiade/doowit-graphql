@@ -38,16 +38,33 @@ export default {
       return deletedTask
     },
 
-    async toggleTask(_parent, args: { id: string }, context: Context) {
+    async completeTask(_parent, args: { id: string }, context: Context) {
       const taskCollection = context.db.collection('tasks')
 
-      const task = await taskCollection.findOne<Pick<TaskDocument, '_id' | 'done' | 'version'>>(
+      const task = await taskCollection.findOne<Pick<TaskDocument, '_id' | 'version'>>(
         { _id: new ObjectId(args.id) },
-        { projection: { done: true, version: true } },
+        { projection: { version: true } },
       )
       if (!task) throw new ApolloError('No task found')
 
-      const update = { done: !task.done, version: task.version + 1 }
+      const update = { done: true, version: task.version + 1 }
+      await taskCollection.updateOne({ _id: task._id }, { $set: update })
+
+      const updatedTask = { ...task, ...update }
+      pubsub.publish(TASK_DONE, { taskDone: updatedTask })
+      return updatedTask
+    },
+
+    async uncompleteTask(_parent, args: { id: string }, context: Context) {
+      const taskCollection = context.db.collection('tasks')
+
+      const task = await taskCollection.findOne<Pick<TaskDocument, '_id' | 'version'>>(
+        { _id: new ObjectId(args.id) },
+        { projection: { version: true } },
+      )
+      if (!task) throw new ApolloError('No task found')
+
+      const update = { done: false, version: task.version + 1 }
       await taskCollection.updateOne({ _id: task._id }, { $set: update })
 
       const updatedTask = { ...task, ...update }
