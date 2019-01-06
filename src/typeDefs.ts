@@ -1,13 +1,11 @@
 import { gql } from 'apollo-server'
 
 const typeDefs = gql`
-  scalar DateTime
-
   type Task {
     id: ID!
     message: String!
     done: Boolean!
-    updatedAt: DateTime!
+    version: Int!
   }
 
   type Mutation {

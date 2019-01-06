@@ -7,7 +7,7 @@ export interface Document {
 export interface TaskDocument extends Document {
   done: boolean
   message: string
-  updatedAt: Date
+  version: number
 }
 
 export default class MongoConnector {

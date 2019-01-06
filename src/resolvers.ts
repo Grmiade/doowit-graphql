@@ -1,5 +1,4 @@
 import { PubSub, ApolloError } from 'apollo-server'
-import { GraphQLDateTime } from 'graphql-iso-date'
 import { ObjectId } from 'mongodb'
 
 import { TaskDocument } from 'connectors/mongo'
@@ -11,8 +10,6 @@ const TASK_DONE = 'TASK_DONE'
 const TASK_DELETED = 'TASK_DELETED'
 
 export default {
-  DateTime: GraphQLDateTime,
-
   Task: {
     id: (parent: TaskDocument) => parent._id.toHexString(),
   },
@@ -23,7 +20,7 @@ export default {
         _id: new ObjectId(),
         message: args.message,
         done: false,
-        updatedAt: new Date(),
+        version: 1,
       })
 
       const newTask = result.ops[0]
@@ -44,14 +41,14 @@ export default {
     async toggleTask(_parent, args: { id: string }, context: Context) {
       const taskCollection = context.db.collection('tasks')
 
-      const task = await taskCollection.findOne<Pick<TaskDocument, '_id' | 'done'>>(
+      const task = await taskCollection.findOne<Pick<TaskDocument, '_id' | 'done' | 'version'>>(
         { _id: new ObjectId(args.id) },
-        { projection: { done: true } },
+        { projection: { done: true, version: true } },
       )
       if (!task) throw new ApolloError('No task found')
 
-      const update = { done: !task.done, updatedAt: new Date() }
-      await taskCollection.update({ _id: task._id }, { $set: update })
+      const update = { done: !task.done, version: task.version + 1 }
+      await taskCollection.updateOne({ _id: task._id }, { $set: update })
 
       const updatedTask = { ...task, ...update }
       pubsub.publish(TASK_DONE, { taskDone: updatedTask })
