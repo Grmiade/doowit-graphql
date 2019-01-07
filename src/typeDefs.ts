@@ -5,7 +5,6 @@ const typeDefs = gql`
     id: ID!
     message: String!
     done: Boolean!
-    version: Int!
   }
 
   type Mutation {

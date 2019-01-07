@@ -7,7 +7,6 @@ export interface Document {
 export interface TaskDocument extends Document {
   done: boolean
   message: string
-  version: number
 }
 
 export default class MongoConnector {

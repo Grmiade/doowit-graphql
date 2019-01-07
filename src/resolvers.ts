@@ -20,7 +20,6 @@ export default {
         _id: new ObjectId(),
         message: args.message,
         done: false,
-        version: 1,
       })
 
       const newTask = result.ops[0]
@@ -39,35 +38,25 @@ export default {
     },
 
     async completeTask(_parent, args: { id: string }, context: Context) {
-      const taskCollection = context.db.collection('tasks')
+      const result = await context.db
+        .collection('tasks')
+        .findOneAndUpdate({ _id: new ObjectId(args.id) }, { $set: { done: true } })
 
-      const task = await taskCollection.findOne<Pick<TaskDocument, '_id' | 'version'>>(
-        { _id: new ObjectId(args.id) },
-        { projection: { version: true } },
-      )
-      if (!task) throw new ApolloError('No task found')
+      const updatedTask = result.value
+      if (!updatedTask) throw new ApolloError('No task found')
 
-      const update = { done: true, version: task.version + 1 }
-      await taskCollection.updateOne({ _id: task._id }, { $set: update })
-
-      const updatedTask = { ...task, ...update }
       pubsub.publish(TASK_DONE, { taskDone: updatedTask })
       return updatedTask
     },
 
     async uncompleteTask(_parent, args: { id: string }, context: Context) {
-      const taskCollection = context.db.collection('tasks')
+      const result = await context.db
+        .collection('tasks')
+        .findOneAndUpdate({ _id: new ObjectId(args.id) }, { $set: { done: false } })
 
-      const task = await taskCollection.findOne<Pick<TaskDocument, '_id' | 'version'>>(
-        { _id: new ObjectId(args.id) },
-        { projection: { version: true } },
-      )
-      if (!task) throw new ApolloError('No task found')
+      const updatedTask = result.value
+      if (!updatedTask) throw new ApolloError('No task found')
 
-      const update = { done: false, version: task.version + 1 }
-      await taskCollection.updateOne({ _id: task._id }, { $set: update })
-
-      const updatedTask = { ...task, ...update }
       pubsub.publish(TASK_DONE, { taskDone: updatedTask })
       return updatedTask
     },
@@ -86,7 +75,7 @@ export default {
   },
 
   Query: {
-    tasks(_parent, _args, context: Context) {
+    tasks(_parent, _args: {}, context: Context) {
       return context.db
         .collection('tasks')
         .find()
