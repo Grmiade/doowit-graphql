@@ -40,7 +40,11 @@ export default {
     async completeTask(_parent, args: { id: string }, context: Context) {
       const result = await context.db
         .collection('tasks')
-        .findOneAndUpdate({ _id: new ObjectId(args.id) }, { $set: { done: true } })
+        .findOneAndUpdate(
+          { _id: new ObjectId(args.id) },
+          { $set: { done: true } },
+          { returnOriginal: false },
+        )
 
       const updatedTask = result.value
       if (!updatedTask) throw new ApolloError('No task found')
@@ -52,7 +56,11 @@ export default {
     async uncompleteTask(_parent, args: { id: string }, context: Context) {
       const result = await context.db
         .collection('tasks')
-        .findOneAndUpdate({ _id: new ObjectId(args.id) }, { $set: { done: false } })
+        .findOneAndUpdate(
+          { _id: new ObjectId(args.id) },
+          { $set: { done: false } },
+          { returnOriginal: false },
+        )
 
       const updatedTask = result.value
       if (!updatedTask) throw new ApolloError('No task found')
