@@ -14,7 +14,7 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    taskDone: Task!
+    taskUpdated: Task!
     taskCreated: Task!
     taskDeleted: Task!
   }

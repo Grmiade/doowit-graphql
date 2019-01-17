@@ -6,7 +6,7 @@ import { Context } from 'context'
 
 const pubsub = new PubSub()
 const TASK_CREATED = 'TASK_CREATED'
-const TASK_DONE = 'TASK_DONE'
+const TASK_UPDATED = 'TASK_UPDATED'
 const TASK_DELETED = 'TASK_DELETED'
 
 export default {
@@ -43,10 +43,10 @@ export default {
       if (!task) throw new ApolloError('No task found')
 
       const update = { done: args.done }
-      await context.db.collection('tasks').update({ _id: taskId }, { $set: update })
+      await context.db.collection('tasks').updateOne({ _id: taskId }, { $set: update })
 
       const updatedTask = { ...task, ...update }
-      pubsub.publish(TASK_DONE, { taskDone: updatedTask })
+      pubsub.publish(TASK_UPDATED, { taskUpdated: updatedTask })
       return updatedTask
     },
   },
@@ -55,8 +55,8 @@ export default {
     taskCreated: {
       subscribe: () => pubsub.asyncIterator(TASK_CREATED),
     },
-    taskDone: {
-      subscribe: () => pubsub.asyncIterator(TASK_DONE),
+    taskUpdated: {
+      subscribe: () => pubsub.asyncIterator(TASK_UPDATED),
     },
     taskDeleted: {
       subscribe: () => pubsub.asyncIterator(TASK_DELETED),
