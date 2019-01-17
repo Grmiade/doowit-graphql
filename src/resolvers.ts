@@ -37,34 +37,15 @@ export default {
       return deletedTask
     },
 
-    async completeTask(_parent, args: { id: string }, context: Context) {
-      const result = await context.db
-        .collection('tasks')
-        .findOneAndUpdate(
-          { _id: new ObjectId(args.id) },
-          { $set: { done: true } },
-          { returnOriginal: false },
-        )
+    async updateTask(_parent, args: { id: string; done: boolean }, context: Context) {
+      const taskId = new ObjectId(args.id)
+      const task = await context.db.collection('tasks').findOne({ _id: taskId })
+      if (!task) throw new ApolloError('No task found')
 
-      const updatedTask = result.value
-      if (!updatedTask) throw new ApolloError('No task found')
+      const update = { done: args.done }
+      await context.db.collection('tasks').update({ _id: taskId }, { $set: update })
 
-      pubsub.publish(TASK_DONE, { taskDone: updatedTask })
-      return updatedTask
-    },
-
-    async uncompleteTask(_parent, args: { id: string }, context: Context) {
-      const result = await context.db
-        .collection('tasks')
-        .findOneAndUpdate(
-          { _id: new ObjectId(args.id) },
-          { $set: { done: false } },
-          { returnOriginal: false },
-        )
-
-      const updatedTask = result.value
-      if (!updatedTask) throw new ApolloError('No task found')
-
+      const updatedTask = { ...task, ...update }
       pubsub.publish(TASK_DONE, { taskDone: updatedTask })
       return updatedTask
     },

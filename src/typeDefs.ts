@@ -9,8 +9,7 @@ const typeDefs = gql`
 
   type Mutation {
     createTask(message: String!): Task!
-    completeTask(id: ID!): Task!
-    uncompleteTask(id: ID!): Task!
+    updateTask(id: ID!, done: Boolean!): Task!
     deleteTask(id: ID!): Task!
   }
 
