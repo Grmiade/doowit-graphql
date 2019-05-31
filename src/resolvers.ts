@@ -15,7 +15,7 @@ export default {
   },
 
   Mutation: {
-    async createTask(_parent, args: { message: string }, context: Context) {
+    async createTask(_parent: null, args: { message: string }, context: Context) {
       const result = await context.db.collection('tasks').insertOne({
         _id: new ObjectId(),
         message: args.message,
@@ -27,7 +27,7 @@ export default {
       return newTask
     },
 
-    async deleteTask(_parent, args: { id: string }, context: Context) {
+    async deleteTask(_parent: null, args: { id: string }, context: Context) {
       const result = await context.db
         .collection('tasks')
         .findOneAndDelete({ _id: new ObjectId(args.id) })
@@ -37,7 +37,7 @@ export default {
       return deletedTask
     },
 
-    async updateTask(_parent, args: { id: string; done: boolean }, context: Context) {
+    async updateTask(_parent: null, args: { id: string; done: boolean }, context: Context) {
       const taskId = new ObjectId(args.id)
       const task = await context.db.collection('tasks').findOne({ _id: taskId })
       if (!task) throw new ApolloError('No task found')
@@ -64,7 +64,7 @@ export default {
   },
 
   Query: {
-    tasks(_parent, _args: {}, context: Context) {
+    tasks(_parent: null, _args: {}, context: Context) {
       return context.db
         .collection('tasks')
         .find()
