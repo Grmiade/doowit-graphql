@@ -7,7 +7,7 @@ dist/
 # development
 .vscode/
 .data/
-now-secrets.json
+.env
 
 # misc
 .DS_Store

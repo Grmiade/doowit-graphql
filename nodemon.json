@@ -2,6 +2,6 @@
   "ignore": [".data/", "build/"],
   "ext": "ts",
   "execMap": {
-    "ts": "node -r now-env -r ts-node/register"
+    "ts": "node -r dotenv/config -r ts-node/register"
   }
 }
