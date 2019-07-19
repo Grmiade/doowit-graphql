@@ -1,14 +1,14 @@
-import { MongoClient } from 'mongodb'
+import { MongoClient } from 'mongodb';
 
-import MongoConnector from './connectors/mongo'
+import MongoConnector from './connectors/mongo';
 
 interface ContextOptions {
-  mongoClient: MongoClient
+  mongoClient: MongoClient;
 }
 
 export function createContext(options: ContextOptions) {
-  const db = new MongoConnector(options.mongoClient)
-  return { db }
+  const db = new MongoConnector(options.mongoClient);
+  return { db };
 }
 
-export type Context = ReturnType<typeof createContext>
+export type Context = ReturnType<typeof createContext>;

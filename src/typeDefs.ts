@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server'
+import { gql } from 'apollo-server';
 
 const typeDefs = gql`
   type Task {
@@ -22,6 +22,6 @@ const typeDefs = gql`
   type Query {
     tasks: [Task!]!
   }
-`
+`;
 
-export default typeDefs
+export default typeDefs;
