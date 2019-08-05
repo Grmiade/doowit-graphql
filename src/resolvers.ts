@@ -64,7 +64,7 @@ export default {
   },
 
   Query: {
-    async tasks(_parent: null, _args: {}, context: Context) {
+    tasks(_parent: null, _args: {}, context: Context) {
       return context.db
         .collection('tasks')
         .find()
