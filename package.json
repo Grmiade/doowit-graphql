@@ -5,30 +5,31 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "nodemon ./src/index.ts",
-    "now-start": "node .",
     "build": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "apollo-datasource": "^0.6.1",
     "apollo-server": "^2.8.1",
+    "dataloader": "^1.4.0",
     "graphql": "^14.4.2",
-    "mongodb": "^3.2.7"
+    "lodash": "^4.17.15",
+    "mongodb": "^3.3.0"
   },
   "devDependencies": {
     "@types/graphql": "^14.2.3",
-    "@types/mongodb": "^3.1.31",
-    "@types/node": "^12.6.9",
+    "@types/lodash": "^4.14.136",
+    "@types/mongodb": "^3.2.2",
+    "@types/node": "^12.7.2",
     "dotenv": "^8.0.0",
-    "husky": "^3.0.2",
+    "husky": "^3.0.3",
     "lint-staged": "^9.2.1",
     "nodemon": "^1.19.1",
-    "now": "^16.0.0",
+    "now": "^16.1.1",
     "prettier": "^1.18.2",
     "ts-node": "^8.3.0",
-    "tslint": "^5.18.0",
-    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.5.3"
   },
   "husky": {

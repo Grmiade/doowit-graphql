@@ -5,7 +5,8 @@ node_modules/
 dist/
 
 # development
-.vscode/
+.vscode/**
+!.vscode/launch.json
 .data/
 .env
 

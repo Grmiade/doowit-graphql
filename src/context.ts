@@ -1,14 +1,17 @@
 import { MongoClient } from 'mongodb';
 
-import MongoConnector from './connectors/mongo';
+import TaskAPI from './datasources/task';
 
-interface ContextOptions {
+interface DatasourcesOptions {
   mongoClient: MongoClient;
 }
 
-export function createContext(options: ContextOptions) {
-  const db = new MongoConnector(options.mongoClient);
-  return { db };
+export function createDatasources(options: DatasourcesOptions) {
+  return {
+    taskAPI: new TaskAPI({ mongoClient: options.mongoClient }),
+  };
 }
 
-export type Context = ReturnType<typeof createContext>;
+export interface Context {
+  dataSources: ReturnType<typeof createDatasources>;
+}

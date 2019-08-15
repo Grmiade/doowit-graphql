@@ -1,16 +1,20 @@
 import { ApolloServer } from 'apollo-server';
 import { MongoClient } from 'mongodb';
 
-import { createContext } from './context';
-import typeDefs from './typeDefs';
+import { createDatasources } from './context';
 import resolvers from './resolvers';
+import typeDefs from './typeDefs';
 
 (async () => {
-  if (!process.env.MONGO_HOST) throw new Error('MONGO_HOST env is missing');
-  const mongoClient = await MongoClient.connect(process.env.MONGO_HOST, { useNewUrlParser: true });
+  if (!process.env.MONGO_URL) throw new Error('MONGO_URL env is missing');
+  const mongoClient = await MongoClient.connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    appname: `${process.env.npm_package_name}@${process.env.npm_package_version}`,
+  });
 
   const server = new ApolloServer({
-    context: createContext({ mongoClient }),
+    dataSources: () => createDatasources({ mongoClient }),
     resolvers,
     typeDefs,
   });

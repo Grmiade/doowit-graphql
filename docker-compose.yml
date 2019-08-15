@@ -1,10 +1,28 @@
-version: "3"
+version: '3.7'
+
+volumes:
+  database:
+    external: true
+    name: mongo-database
 
 services:
-
   database:
     image: mongo
-    ports:
-      - 27017:27017
     volumes:
-      - .data:/data/db
+      - database:/data/db
+    expose:
+      - 27017
+
+  server:
+    build:
+      context: .
+      dockerfile: dev.dockerfile
+    links:
+      - database
+    environment:
+      MONGO_URL: mongodb://database:27017/doowit
+    volumes:
+      - ./src:/usr/node/server/src
+    ports:
+      - 4000:4000
+      - 4100:9229
