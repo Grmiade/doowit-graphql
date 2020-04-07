@@ -14,13 +14,14 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    taskUpdated: Task!
+    taskUpdated(done: Boolean): Task!
     taskCreated: Task!
     taskDeleted: Task!
   }
 
   type Query {
-    tasks: [Task!]!
+    task(id: ID!): Task
+    tasks(limit: Int = 20, offset: Int): [Task!]!
   }
 `;
 

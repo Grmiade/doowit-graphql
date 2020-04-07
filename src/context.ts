@@ -1,14 +1,14 @@
-import { MongoClient } from 'mongodb';
+import { PrismaClient } from '@prisma/client';
 
 import TaskAPI from './datasources/task';
 
 interface DatasourcesOptions {
-  mongoClient: MongoClient;
+  prisma: PrismaClient;
 }
 
 export function createDatasources(options: DatasourcesOptions) {
   return {
-    taskAPI: new TaskAPI({ mongoClient: options.mongoClient }),
+    taskAPI: new TaskAPI({ prisma: options.prisma }),
   };
 }
 

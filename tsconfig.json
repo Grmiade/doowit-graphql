@@ -2,8 +2,8 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "lib": ["esnext"],
-    "module": "commonjs",
+    "isolatedModules": true,
+    "module": "ESNext",
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -13,6 +13,6 @@
     "rootDir": "./src",
     "sourceMap": true,
     "strictNullChecks": true,
-    "target": "esnext"
+    "target": "ES2019"
   }
 }
