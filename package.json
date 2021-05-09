@@ -15,7 +15,7 @@
     "apollo-server": "^2.8.1",
     "dataloader": "^1.4.0",
     "graphql": "^14.4.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mongodb": "^3.3.0"
   },
   "devDependencies": {
